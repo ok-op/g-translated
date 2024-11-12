@@ -96,7 +96,7 @@
         async function translateText() {
             const language = document.getElementById("language").value;
             const inputText = document.getElementById("inputText").value;
-            const url = `https://api.nyxs.pw/tools/translate?text=${encodeURIComponent(inputText)}&to=${language}`;
+            const url = `https://api.nyxs.pw/tools/tts?text=${encodeURIComponent(inputText)}&to=${language}`;
 
             try {
                 const response = await fetch(url, { method: 'GET' });
