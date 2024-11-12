@@ -90,6 +90,8 @@
 
         <button onclick="translateText()">Translate</button>
         <button onclick="clearText()">Clear</button>
+        <br>
+        <button onclick="copyToClipboard()">Copy to Clipboard</button>
 
         <div id="translatedText">Translated text will appear here</div>
 
@@ -99,7 +101,7 @@
         </audio>
 
         <div class="footer">
-            <p>© 2024 <a href="https://example.com" target="_blank">Your Website</a></p>
+            <p>© 2024 <a href="https://t.me/Opleech_WD" target="_blank">❖ 𝐖𝐃 𝐙𝐎𝐍𝐄 ❖ ™</a></p>
         </div>
     </div>
 
@@ -145,6 +147,14 @@
             const audioPlayer = document.getElementById("audioPlayer");
             audioPlayer.style.display = 'none'; // Hide the audio player
             audioPlayer.src = ""; // Clear the audio source
+        }
+        function copyToClipboard() {
+            const translatedText = document.getElementById("translatedText").innerText;
+            navigator.clipboard.writeText(translatedText).then(() => {
+                alert("Text copied to clipboard!");
+            }).catch(err => {
+                console.error("Failed to copy text: ", err);
+            });
         }
     </script>
 </body>
