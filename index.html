@@ -102,6 +102,8 @@
                 const response = await fetch(url);
                 const result = await response.json();
 
+                console.log("API Response:", result);  // API থেকে আসা রেসপন্স কনসোল-এ দেখাবে
+
                 if (result.success) {
                     document.getElementById("translatedText").innerText = result.translated;
                 } else {
@@ -121,6 +123,4 @@
                 console.error("Failed to copy text: ", err);
             });
         }
-    </script>
-</body>
-</html>
+    </
