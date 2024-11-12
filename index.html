@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Translation Page</title>
+    <title>Text-to-Speech Translation</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -48,6 +48,12 @@
             font-size: 16px;
         }
 
+        audio {
+            margin-top: 20px;
+            display: none;
+            width: 100%;
+        }
+
         .footer {
             margin-top: 20px;
             font-size: 14px;
@@ -66,7 +72,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>Text Translator</h2>
+        <h2>Text Translator & TTS</h2>
         <textarea id="inputText" rows="4" cols="50" placeholder="এখানে বাংলা লিখুন"></textarea><br>
 
         <label for="language">Select Language:</label>
@@ -79,14 +85,18 @@
             <option value="zh-CN">Chinese</option>
             <option value="ar">Arabic</option>
             <option value="ru">Russian</option>
-            <option value="bn">Bengali</option> <!-- বাংলা ভাষার অপশন -->
+            <option value="bn">Bengali</option>
         </select><br>
 
         <button onclick="translateText()">Translate</button>
         <button onclick="copyToClipboard()">Copy to Clipboard</button>
 
         <div id="translatedText">Translated text will appear here</div>
-        <audio id="audioPlayer" controls style="margin-top: 20px; display: none;"></audio>
+
+        <!-- Audio Player for TTS -->
+        <audio id="audioPlayer" controls>
+            Your browser does not support the audio element.
+        </audio>
 
         <div class="footer">
             <p>© 2024 <a href="https://example.com" target="_blank">Your Website</a></p>
@@ -101,4 +111,42 @@
 
             try {
                 const response = await fetch(url, { method: 'GET' });
-                const result
+                const result = await response.json();
+
+                console.log("API Response:", result);
+
+                if (result.status && result.result) { // `result.result` ফিল্ড চেক করা
+                    document.getElementById("translatedText").innerText = result.result;
+
+                    // Get the MP3 URL from the result and set it to the audio player
+                    const audioUrl = result.result;
+                    const audioPlayer = document.getElementById("audioPlayer");
+
+                    if (audioUrl) {
+                        audioPlayer.style.display = 'block'; // Show the audio player
+                        audioPlayer.src = audioUrl; // Set the audio URL to the player
+                    } else {
+                        document.getElementById("translatedText").innerText = "No audio URL available.";
+                    }
+                } else if (!result.status && result.message) {
+                    document.getElementById("translatedText").innerText = "Translation failed: " + result.message;
+                } else {
+                    document.getElementById("translatedText").innerText = "Translation failed!";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById("translatedText").innerText = "An error occurred!";
+            }
+        }
+
+        function copyToClipboard() {
+            const translatedText = document.getElementById("translatedText").innerText;
+            navigator.clipboard.writeText(translatedText).then(() => {
+                alert("Text copied to clipboard!");
+            }).catch(err => {
+                console.error("Failed to copy text: ", err);
+            });
+        }
+    </script>
+</body>
+</html>
