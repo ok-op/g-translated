@@ -102,12 +102,12 @@
                 const response = await fetch(url);
                 const result = await response.json();
 
-                console.log("API Response:", result);  // API থেকে আসা রেসপন্স কনসোল-এ দেখাবে
+                console.log("API Response:", result);
 
-                if (result.status && result.translated) {
-                    document.getElementById("translatedText").innerText = result.translated;
-                } else if (!result.status && result.available_languange) {
-                    document.getElementById("translatedText").innerText = "Translation failed! Available languages: " + result.available_languange.map(lang => lang.code).join(", ");
+                if (result.status && result.result) { // `result.result` ফিল্ড চেক করা
+                    document.getElementById("translatedText").innerText = result.result;
+                } else if (!result.status && result.message) {
+                    document.getElementById("translatedText").innerText = "Translation failed: " + result.message;
                 } else {
                     document.getElementById("translatedText").innerText = "Translation failed!";
                 }
