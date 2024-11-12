@@ -94,26 +94,29 @@
 
     <script>
         async function translateText() {
-            const language = document.getElementById("language").value;
-            const inputText = document.getElementById("inputText").value;
-            const url = `https://api.nyxs.pw/tools/translate?text=${encodeURIComponent(inputText)}&to=${language}`;
+    const language = document.getElementById("language").value;
+    const inputText = document.getElementById("inputText").value;
+    const url = `https://api.nyxs.pw/tools/translate?text=${encodeURIComponent(inputText)}&to=${language}`;
 
-            try {
-                const response = await fetch(url);
-                const result = await response.json();
+    try {
+        const response = await fetch(url);
+        const result = await response.json();
 
-                console.log("API Response:", result);  // API থেকে আসা রেসপন্স কনসোল-এ দেখাবে
+        console.log("API Response:", result);  // API থেকে আসা রেসপন্স কনসোল-এ দেখাবে
 
-                if (result.success) {
-                    document.getElementById("translatedText").innerText = result.translated;
-                } else {
-                    document.getElementById("translatedText").innerText = "Translation failed!";
-                }
-            } catch (error) {
-                console.error("Error:", error);
-                document.getElementById("translatedText").innerText = "An error occurred!";
-            }
+        if (result.status && result.translated) {
+            document.getElementById("translatedText").innerText = result.translated;
+        } else if (!result.status && result.available_languange) {
+            document.getElementById("translatedText").innerText = "Translation failed! Available languages: " + result.available_languange.map(lang => lang.code).join(", ");
+        } else {
+            document.getElementById("translatedText").innerText = "Translation failed!";
         }
+    } catch (error) {
+        console.error("Error:", error);
+        document.getElementById("translatedText").innerText = "An error occurred!";
+    }
+}
+
 
         function copyToClipboard() {
             const translatedText = document.getElementById("translatedText").innerText;
