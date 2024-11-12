@@ -99,7 +99,7 @@
             const url = `https://api.nyxs.pw/tools/translate?text=${encodeURIComponent(inputText)}&to=${language}`;
 
             try {
-                const response = await fetch(url);
+                const response = await fetch(url, { method: 'GET' });
                 const result = await response.json();
 
                 console.log("API Response:", result);
