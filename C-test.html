@@ -132,8 +132,12 @@
                 document.getElementById('base64Result').innerText = `Please enter some text to encode.`;
                 return;
             }
-            const encoded = btoa(unescape(encodeURIComponent(text)));
-            document.getElementById('base64Result').innerText = `Encoded: ${encoded}`;
+            try {
+                const encoded = btoa(unescape(encodeURIComponent(text)));
+                document.getElementById('base64Result').innerText = `Encoded: ${encoded}`;
+            } catch (e) {
+                document.getElementById('base64Result').innerText = `Encoding failed. Make sure your input is valid.`;
+            }
         }
 
         // Decode Base64
