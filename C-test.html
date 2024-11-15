@@ -99,6 +99,7 @@
             <textarea id="base64Input" rows="3" placeholder="Enter text to encode or decode"></textarea>
             <button onclick="encodeBase64()">Encode to Base64</button>
             <button onclick="decodeBase64()">Decode from Base64</button>
+            <button onclick="clearFields()">Clear</button>
 
             <div class="output-box">
                 <p id="base64Result"></p>
@@ -174,6 +175,12 @@
             } catch (e) {
                 document.getElementById('base64Result').innerText = `Invalid Base64 string. Please try again.`;
             }
+        }
+
+        // Clear fields
+        function clearFields() {
+            document.getElementById('base64Input').value = '';
+            document.getElementById('base64Result').innerText = '';
         }
 
         // Copy result to clipboard
