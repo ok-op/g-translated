@@ -118,7 +118,7 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        const letters = "ANGEL OP ❤️ ANGEL OP ❤️ WOODcraft ❤️ ANGEL OP ❤️ WOODcraft";
         const fontSize = 16;
         const columns = canvas.width / fontSize;
 
@@ -145,7 +145,7 @@
             }
         }
 
-        setInterval(drawMatrix, 35);
+        setInterval(drawMatrix, 90);
 
         // Encode Base64
         function encodeBase64() {
@@ -156,7 +156,7 @@
             }
             try {
                 const encoded = btoa(unescape(encodeURIComponent(text)));
-                document.getElementById('base64Result').innerText = `Encoded: ${encoded}`;
+                document.getElementById('base64Result').innerText = `${encoded}`;
             } catch (e) {
                 document.getElementById('base64Result').innerText = `Encoding failed. Make sure your input is valid.`;
             }
@@ -171,7 +171,7 @@
             }
             try {
                 const decoded = decodeURIComponent(escape(atob(text)));
-                document.getElementById('base64Result').innerText = `Decoded: ${decoded}`;
+                document.getElementById('base64Result').innerText = `${decoded}`;
             } catch (e) {
                 document.getElementById('base64Result').innerText = `Invalid Base64 string. Please try again.`;
             }
