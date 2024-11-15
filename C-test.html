@@ -49,6 +49,7 @@
             color: #33ff33;
             border: 1px solid #33ff33;
             padding: 10px;
+            width: 100%;
             margin-top: 10px;
             font-family: "Courier New", Courier, monospace;
         }
@@ -59,19 +60,7 @@
         }
 
         textarea {
-            width: 100%;
             resize: none;
-        }
-
-        #base64Result {
-            background-color: black;
-            border: 1px solid #33ff33;
-            padding: 10px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            overflow: auto;
-            height: 100px;
-            margin-top: 10px;
         }
 
         #matrix {
@@ -83,6 +72,23 @@
             z-index: 1;
             opacity: 0.5;
         }
+
+        .copy-btn {
+            background-color: #33ff33;
+            color: black;
+            border: none;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .copy-btn:hover {
+            background-color: #00ff00;
+        }
+
+        .output-box {
+            display: flex;
+            flex-direction: column;
+        }
     </style>
 </head>
 
@@ -93,8 +99,11 @@
             <textarea id="base64Input" rows="3" placeholder="Enter text to encode or decode"></textarea>
             <button onclick="encodeBase64()">Encode to Base64</button>
             <button onclick="decodeBase64()">Decode from Base64</button>
-            <button onclick="copyToClipboard()">Copy to Clipboard</button>
-            <div id="base64Result"></div>
+
+            <div class="output-box">
+                <p id="base64Result"></p>
+                <button class="copy-btn" onclick="copyToClipboard()">Copy to Clipboard</button>
+            </div>
         </div>
     </div>
 
@@ -146,7 +155,7 @@
             }
             try {
                 const encoded = btoa(unescape(encodeURIComponent(text)));
-                document.getElementById('base64Result').innerText = encoded;
+                document.getElementById('base64Result').innerText = `Encoded: ${encoded}`;
             } catch (e) {
                 document.getElementById('base64Result').innerText = `Encoding failed. Make sure your input is valid.`;
             }
@@ -161,24 +170,21 @@
             }
             try {
                 const decoded = decodeURIComponent(escape(atob(text)));
-                document.getElementById('base64Result').innerText = decoded;
+                document.getElementById('base64Result').innerText = `Decoded: ${decoded}`;
             } catch (e) {
                 document.getElementById('base64Result').innerText = `Invalid Base64 string. Please try again.`;
             }
         }
 
-        // Copy to clipboard
+        // Copy result to clipboard
         function copyToClipboard() {
-            const result = document.getElementById('base64Result').innerText;
-            if (result) {
-                navigator.clipboard.writeText(result).then(() => {
-                    alert('Copied to clipboard!');
-                }).catch(err => {
-                    alert('Failed to copy: ', err);
-                });
-            } else {
-                alert('Nothing to copy!');
-            }
+            const resultText = document.getElementById('base64Result').innerText;
+            const textarea = document.createElement('textarea');
+            textarea.value = resultText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
         }
 
         // Adjust canvas size on window resize
