@@ -89,6 +89,28 @@
             display: flex;
             flex-direction: column;
         }
+		
+		.music-control {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            z-index: 10;
+            color: white;
+            font-family: "Courier New", Courier, monospace;
+        }
+
+        .music-control button {
+            background-color: #333;
+            color: #33ff33;
+            border: 1px solid #33ff33;
+            padding: 10px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .music-control button:hover {
+            background-color: #555;
+        }
     </style>
 </head>
 
@@ -103,60 +125,78 @@
 
             <div class="output-box">
                 <p id="base64Result"></p>
-                <button class="copy-btn" onclick="copyToClipboard()">Copy to Clipboard</button>
+                <button class="copy-btn" onclick="copyToClipboard()">Copy to Code</button>
             </div>
         </div>
     </div>
 
     <canvas id="matrix"></canvas>
 
-<script>
-    const canvas = document.getElementById("matrix");
-    const ctx = canvas.getContext("2d");
+    <div class="music-control">
+        <button onclick="toggleMusic()">Play/Pause Music</button>
+    </div>
 
-    // Adjust canvas dimensions to fit the window
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    <script>
+        const canvas = document.getElementById("matrix");
+        const ctx = canvas.getContext("2d");
 
-    const words = [
-        { text: "ANGEL OP", color: "#ffffff" }, // Red
-        { text: "❤️", color: "#ff69b4" }, // Pink
-        { text: "WOODcraft", color: "#00ff00" } // Green
-    ];
-
-    const fontSize = 16;
-    const columns = canvas.width / fontSize;
-
-    // Array for matrix animation
-    const drops = Array(Math.floor(columns)).fill(1);
-
-    // Draw matrix effect
-    function drawMatrix() {
-        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        ctx.font = `${fontSize}px Courier New`;
-
-        for (let i = 0; i < drops.length; i++) {
-            const word = words[Math.floor(Math.random() * words.length)];
-            ctx.fillStyle = word.color; // Set text color
-            ctx.fillText(word.text, i * fontSize, drops[i] * fontSize);
-
-            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                drops[i] = 0;
-            }
-
-            drops[i]++;
-        }
-    }
-
-    setInterval(drawMatrix, 35);
-
-    // Adjust canvas size on window resize
-    window.addEventListener("resize", () => {
+        // Adjust canvas dimensions
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-    });
+
+        const words = [
+            { text: "ANGEL OP", color: "#ff0000" }, // Red
+            { text: "❤️", color: "#ff69b4" }, // Pink
+            { text: "WOODcraft", color: "#00ff00" } // Green
+        ];
+
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+
+        // Array for matrix animation
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        // Draw matrix effect
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.font = `${fontSize}px Courier New`;
+
+            for (let i = 0; i < drops.length; i++) {
+                const word = words[Math.floor(Math.random() * words.length)];
+                ctx.fillStyle = word.color; // Set text color
+                ctx.fillText(word.text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 90);
+
+        // Background music functionality
+        const audio = new Audio("./JAILER-Kaavaalaa-Song.MP3"); // Replace with your file path
+        audio.loop = true; // Loop music
+
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play();
+            } else {
+                audio.pause();
+            }
+        }
+
+        // Auto-play music on page load
+        window.addEventListener("load", () => {
+            audio.play().catch(() => {
+                console.log("Music autoplay failed due to browser restrictions.");
+            });
+        });
+		
         // Encode Base64
         function encodeBase64() {
             const text = document.getElementById('base64Input').value;
