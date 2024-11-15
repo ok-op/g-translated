@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Tool - Base64 Encoder/Decoder</title>
+    <style>
+        body {
+            background-color: black;
+            color: #33ff33;
+            font-family: "Courier New", Courier, monospace;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        h1 {
+            color: #00ff00;
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+            position: relative;
+            z-index: 10;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 800px;
+            border: 2px solid #33ff33;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            position: relative;
+            z-index: 10;
+        }
+
+        .tool {
+            margin-bottom: 2em;
+        }
+
+        input,
+        button,
+        textarea {
+            background-color: black;
+            color: #33ff33;
+            border: 1px solid #33ff33;
+            padding: 10px;
+            width: 100%;
+            margin-top: 10px;
+            font-family: "Courier New", Courier, monospace;
+        }
+
+        button {
+            cursor: pointer;
+            width: 100%;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        #matrix {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Base64 Encoder/Decoder</h1>
+    <div class="container">
+        <div class="tool">
+            <textarea id="base64Input" rows="3" placeholder="Enter text to encode or decode"></textarea>
+            <button onclick="encodeBase64()">Encode to Base64</button>
+            <button onclick="decodeBase64()">Decode from Base64</button>
+            <p id="base64Result"></p>
+        </div>
+    </div>
+
+    <canvas id="matrix"></canvas>
+
+    <script>
+        const canvas = document.getElementById("matrix");
+        const ctx = canvas.getContext("2d");
+
+        // Adjust canvas dimensions to fit the window
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+
+        // Array for matrix animation
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        // Draw matrix effect
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "#33ff33";
+            ctx.font = `${fontSize}px Courier New`;
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters[Math.floor(Math.random() * letters.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 35);
+
+        // Encode Base64
+        function encodeBase64() {
+            const text = document.getElementById('base64Input').value;
+            if (!text) {
+                document.getElementById('base64Result').innerText = `Please enter some text to encode.`;
+                return;
+            }
+            const encoded = btoa(unescape(encodeURIComponent(text)));
+            document.getElementById('base64Result').innerText = `Encoded: ${encoded}`;
+        }
+
+        // Decode Base64
+        function decodeBase64() {
+            const text = document.getElementById('base64Input').value;
+            if (!text) {
+                document.getElementById('base64Result').innerText = `Please enter some Base64 text to decode.`;
+                return;
+            }
+            try {
+                const decoded = decodeURIComponent(escape(atob(text)));
+                document.getElementById('base64Result').innerText = `Decoded: ${decoded}`;
+            } catch (e) {
+                document.getElementById('base64Result').innerText = `Invalid Base64 string. Please try again.`;
+            }
+        }
+
+        // Adjust canvas size on window resize
+        window.addEventListener("resize", () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+
+</html>
