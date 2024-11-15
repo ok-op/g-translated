@@ -70,8 +70,8 @@
             width: 100%;
             height: 100%;
             z-index: 1;
-            opacity: 0.5;
-        }
+            opacity: 0.8;
+         }
 
         .copy-btn {
             background-color: #33ff33;
@@ -110,43 +110,53 @@
 
     <canvas id="matrix"></canvas>
 
-    <script>
-        const canvas = document.getElementById("matrix");
-        const ctx = canvas.getContext("2d");
+<script>
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
 
-        // Adjust canvas dimensions to fit the window
+    // Adjust canvas dimensions to fit the window
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const words = [
+        { text: "ANGEL OP", color: "#ff0000" }, // Red
+        { text: "❤️", color: "#ff69b4" }, // Pink
+        { text: "WOODcraft", color: "#00ff00" } // Green
+    ];
+
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+
+    // Array for matrix animation
+    const drops = Array(Math.floor(columns)).fill(1);
+
+    // Draw matrix effect
+    function drawMatrix() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.font = `${fontSize}px Courier New`;
+
+        for (let i = 0; i < drops.length; i++) {
+            const word = words[Math.floor(Math.random() * words.length)];
+            ctx.fillStyle = word.color; // Set text color
+            ctx.fillText(word.text, i * fontSize, drops[i] * fontSize);
+
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+
+            drops[i]++;
+        }
+    }
+
+    setInterval(drawMatrix, 90);
+
+    // Adjust canvas size on window resize
+    window.addEventListener("resize", () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-
-        const letters = "ANGEL OP ❤️ ANGEL OP ❤️ WOODcraft ❤️ ANGEL OP ❤️ WOODcraft";
-        const fontSize = 16;
-        const columns = canvas.width / fontSize;
-
-        // Array for matrix animation
-        const drops = Array(Math.floor(columns)).fill(1);
-
-        // Draw matrix effect
-        function drawMatrix() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = "#33ff33";
-            ctx.font = `${fontSize}px Courier New`;
-
-            for (let i = 0; i < drops.length; i++) {
-                const text = letters[Math.floor(Math.random() * letters.length)];
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-
-                drops[i]++;
-            }
-        }
-
-        setInterval(drawMatrix, 90);
-
+    });
         // Encode Base64
         function encodeBase64() {
             const text = document.getElementById('base64Input').value;
