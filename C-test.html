@@ -18,6 +18,7 @@
             justify-content: center;
             height: 100vh;
             overflow: hidden;
+            box-sizing: border-box;
         }
 
         h1 {
@@ -29,17 +30,19 @@
         }
 
         .container {
-            width: 80%;
+            width: 90%;
             max-width: 800px;
             border: 2px solid #33ff33;
             padding: 20px;
             background-color: rgba(0, 0, 0, 0.8);
             position: relative;
             z-index: 10;
+            box-sizing: border-box;
         }
 
         .tool {
             margin-bottom: 2em;
+            width: 100%;
         }
 
         input,
@@ -52,6 +55,7 @@
             width: 100%;
             margin-top: 10px;
             font-family: "Courier New", Courier, monospace;
+            box-sizing: border-box;
         }
 
         button {
@@ -61,17 +65,15 @@
 
         textarea {
             resize: none;
+            height: 120px;
+            box-sizing: border-box;
         }
 
-        #matrix {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            opacity: 0.8;
-         }
+        .output-box {
+            display: flex;
+            flex-direction: column;
+            margin-top: 10px;
+        }
 
         .copy-btn {
             background-color: #33ff33;
@@ -79,18 +81,14 @@
             border: none;
             margin-top: 10px;
             cursor: pointer;
+            box-sizing: border-box;
         }
 
         .copy-btn:hover {
             background-color: #00ff00;
         }
 
-        .output-box {
-            display: flex;
-            flex-direction: column;
-        }
-		
-		.music-control {
+        .music-control {
             position: absolute;
             bottom: 10px;
             left: 10px;
@@ -110,6 +108,29 @@
 
         .music-control button:hover {
             background-color: #555;
+        }
+
+        /* Media queries for responsive design */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .container {
+                width: 100%;
+                padding: 10px;
+            }
+
+            input,
+            button,
+            textarea {
+                font-size: 14px;
+            }
+
+            .copy-btn {
+                padding: 8px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -196,7 +217,7 @@
                 console.log("Music autoplay failed due to browser restrictions.");
             });
         });
-		
+
         // Encode Base64
         function encodeBase64() {
             const text = document.getElementById('base64Input').value;
